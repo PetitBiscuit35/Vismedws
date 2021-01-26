@@ -7,7 +7,7 @@ if (!defined('BASEPATH'))
  * @author baraban
  *
  */
-class CI_RapportsVisites extends CI_Controller {
+class CI_RapportsVisites extends My_Controller {
     /**
      * Initialise le contrôleur CI_RapportsVisites
      * Le modèle est chargé dès la création du contrôleur
