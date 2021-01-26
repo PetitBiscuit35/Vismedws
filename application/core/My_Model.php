@@ -1,6 +1,7 @@
 <?php  if (!defined('BASEPATH'))   exit('No direct script access allowed');
 
-class My_Model extends CI_Model {
+abstract class My_Model extends CI_Model {
+    protected $monPdo;
     /**
    
      */
@@ -27,5 +28,9 @@ class My_Model extends CI_Model {
                 throw new Exception("Base de données inaccessible");
         }
     }
+
+
+
+
 }
 ?>

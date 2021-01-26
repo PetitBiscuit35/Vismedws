@@ -1,6 +1,6 @@
 <?php  if (!defined('BASEPATH'))   exit('No direct script access allowed');
 
-class Medicament_Model extends CI_Model {
+class Medicament_Model extends My_Model {
     
     /**
     * Fournit les depotLegal et nom commercial de tous les médicaments
