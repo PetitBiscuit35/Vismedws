@@ -51,7 +51,8 @@ abstract class My_Controller extends CI_Controller {
         ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) 
         ->_display();
         die();
-      }/*else{
+      }/*
+      else{
         $response = ["status" => "NO", "data" => "Identifiant ou mot de passe erroné"];
         $json = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
