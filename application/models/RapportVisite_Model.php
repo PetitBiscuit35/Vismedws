@@ -36,5 +36,51 @@ class RapportVisite_Model extends My_Model {
         }
         return $ligne;
     }
+
+    /**
+    * Fournit le numéro de dernier rapport de visite du visiteur
+    * @param string $idVisiteur
+    * @return stdClass ou null
+    */
+    public function getDernierRapport($idVisiteur) {
+        $query = "select id from rapportvisite where idVisiteur = ? order by id desc";
+        $cmd = $this->monPdo->prepare($query);
+        $cmd->bindValue(1, $idVisiteur);
+        $cmd->execute();
+        $ligne = $cmd->fetch(PDO::FETCH_OBJ);
+        $cmd->closeCursor();
+        if ( $ligne === false ) {
+            $id = 0;
+        }
+        else {
+            $id = $ligne->id;
+        }
+        return $id;
+    }
+
+    /**
+    * Ajout d'un nouveau rapport
+    */
+    public function addNewRapport($idVisiteur, $idMedecin, $dateVisite, $dateCreaRapport, $bilan, $coefConfiance, $idMotifVisite) {
+
+        $query = "insert into rapportvisite (idVisiteur, id, idMedecin, dateVisite, dateCreaRapport, bilan, coefConfiance, idMotifVisite)
+        values (:idVisiteur, :id, :idMedecin, :dateVisite, :dateCreaRapport, :bilan, :coefConfiance, :idMotifVisite);";
+
+        $cmd = $this->monPdo->prepare($query);
+
+        $cmd->bindValue('idVisiteur', $idVisiteur);
+
+        $id = $this->mRapportVisite->getDernierRapport($idVisiteur) + 1;
+
+        $cmd->bindValue('id', $id, PDO::PARAM_INT);
+        $cmd->bindValue('idMedecin', $idMedecin, PDO::PARAM_INT);
+        $cmd->bindValue('dateVisite', $dateVisite, PDO::PARAM_STR);
+        $cmd->bindValue('dateCreaRapport', $dateCreaRapport, PDO::PARAM_STR);
+        $cmd->bindValue('bilan', $bilan, PDO::PARAM_STR);
+        $cmd->bindValue('coefConfiance', $coefConfiance, PDO::PARAM_INT);
+        $cmd->bindValue('idMotifVisite', $idMotifVisite, PDO::PARAM_INT);
+
+        $cmd->execute();
+    }
 }
 ?>

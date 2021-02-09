@@ -6,7 +6,7 @@ class Visiteur_Model extends My_Model {
     * @return array
     */
     public function getList() {
-        $query = "select id, nom, prenom from Visiteur";
+        $query = "select id, nom, prenom from visiteur";
         $cmd = $this->monPdo->prepare($query);
         $cmd->execute();
         $lignes = $cmd->fetchAll(PDO::FETCH_OBJ);
@@ -22,7 +22,7 @@ class Visiteur_Model extends My_Model {
     * @return stdClass ou null
     */
     public function getById($id) {
-        $query = "select id, nom, prenom, login from Visiteur where id = :id";
+        $query = "select id, nom, prenom, login from visiteur where id = :id";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue("id", $id);
         $cmd->execute();
@@ -33,5 +33,38 @@ class Visiteur_Model extends My_Model {
         }
         return $ligne;
     }
+
+    /**
+    * Authentification
+    *
+    */
+    public function getByCredentials($login, $password) {
+
+        $query = "select login, mdp from Visiteur where login = :login AND mdp = :mdp";
+
+        $cmd = $this->monPdo->prepare($query);
+
+        $cmd->bindValue("login", $login);
+
+        $cmd->bindValue("mdp", $password);
+
+        $cmd->execute();
+
+        $ligne = $cmd->fetch(PDO::FETCH_OBJ);
+
+        return $ligne;
+
+        /* $cmd->closeCursor();
+
+        if ( $ligne === $password ) {
+            $auth = TRUE;
+        }
+        else 
+        {
+            $auth = FALSE;
+        }
+        return $auth; */
+    }
 }
+
 ?>

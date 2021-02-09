@@ -60,8 +60,11 @@ $route['visiteurs/(:any)/rapports']['get'] = 'CI_RapportsVisites/getAll/$1';
 $route['visiteurs/(:any)/rapports/(:num)']['get'] = 'CI_RapportsVisites/getOne/$1/$2';
 $route['visiteurs/(:any)/rapports/(:any)']['get'] = 'CI_RapportsVisites/error404/$1/$2';
 
+$route['visiteurs/(:any)/rapports']['post'] = 'CI_RapportsVisites/addRapport/$1';
+
 $route['medicaments']['get'] = 'CI_Medicaments/getAll';
 $route['medicaments/(:any)']['get'] = 'CI_Medicaments/getOne/$1';
+$route['medicaments/(:any)']['put'] = 'CI_Medicaments/update/$1';
 
 $route['default_controller'] = 'welcome';
 $route['404_override'] = 'CI_Medicaments/error404';

@@ -40,19 +40,19 @@ class CI_Medicaments extends My_Controller {
     }
 
     /**
-     * Récupère un Medicament à partir de l'identifiant $code
+     * Récupère un Medicament à partir de l'identifiant $depotLegal
      * Prépare et envoie la réponse http : code statut, contenu
-     * @param string $code
+     * @param string $depotLegal
      */
-    public function getOne($code) {
+    public function getOne($depotLegal) {
 
-        $unMedicament = $this->mMedicament->getById($code);
+        $unMedicament = $this->mMedicament->getById($depotLegal);
 
         if ($unMedicament != null)
         {
-        $response = ["status" => "OK", "data" => $unMedicament, "link" => site_url("/medicaments/" . $code)];
+        $response = ["status" => "OK", "data" => $unMedicament, "link" => site_url("/medicaments/" . $depotLegal)];
         
-         $this->output
+        $this->output
          ->set_status_header(200)
          ->set_content_type('application/json', 'utf-8')
         ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
@@ -66,6 +66,48 @@ class CI_Medicaments extends My_Controller {
          ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         }
     }
+    public function update($depotLegal){
+        // récupération des données du corps (body) de la requête
+        $nomCommercial = $this->input->input_stream("nomCommercial");
+        $composition = $this->input->input_stream("composition");
+        $effets = $this->input->input_stream("effets");
+        $contreIndic = $this->input->input_stream("contreIndic");
+        $prixEchantillon = $this->input->input_stream("prixEchantillon");
+
+        $this->load->library('form_validation');
+        $tab= $this->input->input_stream();
+        $this->form_validation->set_data($tab);
+        
+        $this->form_validation->set_rules('nomCommercial','nomCommercial','max_length[25]');
+        $this->form_validation->set_rules('composition','composition','max_length[255]');
+        $this->form_validation->set_rules('effets','effets','max_length[255]');
+        $this->form_validation->set_rules('contreIndic','contreIndic','max_length[255]');
+        $this->form_validation->set_rules('prixEchantillon','prixEchantillon','integer');
+
+        // conversion de l'id et de la capacité en valeurs entières
+        if($this->form_validation->run()){
+    
+            // mise à jour dans le modèle
+            $result = $this->mMedicament->update($depotLegal, $nomCommercial, $composition, $effets, $contreIndic, $prixEchantillon);
+            $response = ["status" => "Médicament modifié " . $depotLegal ,
+                         "data" => [ "link" => site_url("/medicaments/" . $depotLegal) ]
+                        ];
+            $this->output
+                    ->set_status_header(200)
+                    ->set_content_type('application/json', 'utf-8')
+                    ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+        else{
+            $response = ["status" => "Les données du médicament sont invalides",
+            "errors"=>$this->form_validation->error_array()];
+                        
+            $this->output
+                    ->set_status_header(400)
+                    ->set_content_type('application/json', 'utf-8')
+                    ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+    }
+}
     /**
      * Traite un appel mal formé où une valeur numérique pour le code est attendu
      */

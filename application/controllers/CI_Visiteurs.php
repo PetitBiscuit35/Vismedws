@@ -14,8 +14,7 @@ class CI_Visiteurs extends My_Controller {
      * car toutes les méthodes en ont besoin
      */
     public function __construct() {
-        parent::__construct();
-        $this->load->model('Visiteur_Model', 'mVisiteur');    
+        parent::__construct();    
     }
 
     /**

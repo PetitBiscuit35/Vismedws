@@ -31,7 +31,6 @@ class CI_Medecins extends My_Controller {
                 ->set_content_type('application/json', 'utf-8')
                 ->set_output($json);
     }
-
     /**
      * Récupère un médecin à partir de l'identifiant $id
      * Prépare et envoie la réponse http : code statut, contenu
@@ -54,7 +53,6 @@ class CI_Medecins extends My_Controller {
                 ->set_status_header(404)
                 ->set_content_type('application/json', 'utf-8')
                 ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-        
     }
 }
 ?>

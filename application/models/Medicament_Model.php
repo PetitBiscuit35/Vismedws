@@ -6,7 +6,7 @@ class Medicament_Model extends My_Model {
     * @return stdClass
     */
     public function getList() {
-        $query = "select depotLegal, nomCommercial from Medicament";
+        $query = "select depotLegal, nomCommercial from medicament";
         $cmd = $this->monPdo->prepare($query);
         $cmd->execute();
         $lignes = $cmd->fetchAll(PDO::FETCH_OBJ);
@@ -23,7 +23,7 @@ class Medicament_Model extends My_Model {
     */
     public function getById($id) {
         $query = "select * "
-                . "from Medicament "
+                . "from medicament "
                 . "where depotLegal = :depotLegal";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue("depotLegal", $id);
@@ -34,6 +34,38 @@ class Medicament_Model extends My_Model {
             $ligne = null;
         }
         return $ligne;
+    }
+
+    /**
+    * Update le médicament correspondant à l'id spécifié
+    * @param string $depotLegal
+    * @return stdClass ou null
+    */
+    public function update($depotLegal, $nomCommercial, $composition, $effets, $contreIndic, $prixEchantillon){
+
+        $query = "update medicament set 
+        nomCommercial=:nomCommercial, 
+        composition=:composition,
+        effets=:effets, 
+        contreIndic=:contreIndic,
+        prixEchantillon=:prixEchantillon
+        where depotLegal like :depotLegal;";
+
+        $cmd = $this->monPdo->prepare($query);
+        
+        $cmd->bindValue(":depotLegal", $depotLegal, PDO::PARAM_STR);
+        $cmd->bindValue(":nomCommercial", $nomCommercial, PDO::PARAM_STR);
+        $cmd->bindValue(":composition", $composition, PDO::PARAM_STR);
+        $cmd->bindValue(":effets", $effets, PDO::PARAM_STR);
+        $cmd->bindValue(":contreIndic", $contreIndic, PDO::PARAM_STR);
+        $cmd->bindValue(":prixEchantillon", $prixEchantillon, PDO::PARAM_INT);
+
+        $cmd->execute();
+
+        $valueRow = $cmd->rowCount();
+        $cmd->closeCursor();
+
+        return $valueRow;
     }
 }
 ?>
