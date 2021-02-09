@@ -36,5 +36,17 @@ class RapportVisite_Model extends My_Model {
         }
         return $ligne;
     }
+
+    public function sonRapport($idVisiteur) {
+        $query = "select * from RapportVisite where idVisiteur = ?";
+        $cmd = $this->monPdo->prepare($query);
+        $cmd->bindValue(1, $idVisiteur);
+        $cmd->execute();
+        $ligne = $cmd->fetchAll(PDO::FETCH_OBJ);
+        if ( $ligne === false ) {
+            $ligne = null;
+        }
+        return $ligne;
+    }
 }
 ?>

@@ -55,10 +55,11 @@ $route['medecins/(:any)']['get'] = 'CI_Medecins/error404/$1';
 
 $route['visiteurs']['get'] = 'CI_Visiteurs/getAll';
 $route['visiteurs/(:any)']['get'] = 'CI_Visiteurs/getOne/$1';
+$route['visiteurs/(:any)']['put'] = 'CI_Visiteurs/update/$1';
 
 $route['visiteurs/(:any)/rapports']['get'] = 'CI_RapportsVisites/getAll/$1';
 $route['visiteurs/(:any)/rapports/(:num)']['get'] = 'CI_RapportsVisites/getOne/$1/$2';
-$route['visiteurs/(:any)/rapports/(:any)']['put'] = 'CI_RapportsVisites/updateVisiteur/$1';
+$route['visiteurs/(:any)/rapports/(:num)']['get'] = 'CI_RapportsVisites/getSonRapport/$1/$2';
 $route['visiteurs/(:any)/rapports/(:any)']['get'] = 'CI_RapportsVisites/error404/$1/$2';
 
 $route['medicaments']['get'] = 'CI_Medicaments/getAll';

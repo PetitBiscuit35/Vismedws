@@ -7,7 +7,7 @@ if (!defined('BASEPATH'))
  * @author baraban
  *
  */
-class CI_Medecins extends CI_Controller {
+class CI_Medecins extends My_Controller {
     /**
      * Initialise le contrôleur CI_Medecins
      * Le modèle est chargé dès la création du contrôleur

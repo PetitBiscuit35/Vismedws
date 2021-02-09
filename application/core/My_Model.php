@@ -1,7 +1,7 @@
 <?php  if (!defined('BASEPATH'))   exit('No direct script access allowed');
 
 
-class My_Model extends CI_Model {
+abstract class My_Model extends CI_Model {
 protected $monPdo; // @var PDO $monPDO
     /**
      * Initialise une instance de la classe Visiteur_Model
@@ -30,4 +30,5 @@ protected $monPdo; // @var PDO $monPDO
                 throw new Exception("Base de données inaccessible");
         }
     }
+    
 }

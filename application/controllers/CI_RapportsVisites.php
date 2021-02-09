@@ -7,7 +7,7 @@ if (!defined('BASEPATH'))
  * @author baraban
  *
  */
-class CI_RapportsVisites extends CI_Controller {
+class CI_RapportsVisites extends My_Controller {
     /**
      * Initialise le contrôleur CI_RapportsVisites
      * Le modèle est chargé dès la création du contrôleur
@@ -41,6 +41,13 @@ class CI_RapportsVisites extends CI_Controller {
         $this->setResponse($codeStatut, $response);
     }
 
+    private function getSonRapport(string $idVisiteur) {
+        $rapport = $this->mRapportVisite->sonRapport($idVisiteur);
+        $codeStatut = 200;
+        $response = ["status" => "OK", "data" => $rapport];
+        $this->setResponse($codeStatut, $response);
+    }
+
     /**
      * Traite un appel mal formé où une valeur numérique pour l'id est attendu
      */
@@ -60,5 +67,6 @@ class CI_RapportsVisites extends CI_Controller {
                 ->set_content_type('application/json', 'utf-8')
                 ->set_output($json);        
     }
+
 }
 ?>
