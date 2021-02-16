@@ -50,13 +50,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['medecins']['get'] = 'CI_Medecins/getAll';
-$route['medecins/(:num)']['get'] = 'CI_Medecins/getOne/$1';
+//$route['medecins/(:num)']['get'] = 'CI_Medecins/getOne/$1';
+$route['medecins/(:num)']['get'] = 'CI_Medecins/getPostal/$1';
 $route['medecins/(:num)']['put'] = 'CI_Medecins/update/$1';
 $route['medecins/(:any)']['get'] = 'CI_Medecins/error404/$1';
 
 
 $route['visiteurs']['get'] = 'CI_Visiteurs/getAll';
 $route['visiteurs/(:any)']['get'] = 'CI_Visiteurs/getOne/$1';
+
 
 
 $route['visiteurs/(:any)/rapports']['get'] = 'CI_RapportsVisites/getAll/$1';

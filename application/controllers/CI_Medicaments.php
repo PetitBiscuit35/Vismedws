@@ -6,7 +6,7 @@ if (!defined('BASEPATH'))
  * Contrôleur prenant en charge les demandes liées aux ressources de type Medicament
  * @author baraban
  */
-class CI_Medicaments extends CI_Controller {
+class CI_Medicaments extends My_Controller{
     /**
      * Initialise le contrôleur CI_Medicaments
      * Le modèle est chargé dès la création du contrôleur

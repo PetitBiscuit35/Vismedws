@@ -7,7 +7,7 @@ class RapportVisite_Model extends My_Model {
     * @return array
     */
     public function getList($idVisiteur) : array {
-        $query = "select id, idMedecin, dateVisite, idMotifVisite from RapportVisite where idVisiteur = ?";
+        $query = "select id, idMedecin, dateVisite, idMotifVisite from rapportvisite where idVisiteur = ?";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue(1, $idVisiteur);
         $cmd->execute();

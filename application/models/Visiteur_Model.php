@@ -7,7 +7,7 @@ class Visiteur_Model extends My_Model {
     * @return array
     */
     public function getList() {
-        $query = "select id, nom, prenom from Visiteur";
+        $query = "select id, nom, prenom from visiteur";
         $cmd = $this->monPdo->prepare($query);
         $cmd->execute();
         $lignes = $cmd->fetchAll(PDO::FETCH_OBJ);
@@ -33,6 +33,21 @@ class Visiteur_Model extends My_Model {
             $ligne = null;
         }
         return $ligne;
+    }
+
+
+    //vérifier si 1 utilisateur est dans la base de données
+    public function getByCredentials($login, $mdp){
+        $query = "select id, nom, prenom, login from visiteur where login = :login and mdp = :mdp";
+        $cmd = $this->monPdo->prepare($query);
+        $cmd->bindValue("login", $login);
+        $cmd->bindValue("mdp", $mdp);
+        $cmd->execute();
+        $ligne = $cmd->fetch(PDO::FETCH_OBJ);
+        $cmd->closeCursor();
+        
+        return $ligne;
+
     }
 }
 ?>

@@ -7,7 +7,7 @@ class Medicament_Model extends My_Model {
     * @return stdClass
     */
     public function getList() {
-        $query = "select depotLegal, nomCommercial from Medicament";
+        $query = "select depotLegal, nomCommercial from medicament";
         $cmd = $this->monPdo->prepare($query);
         $cmd->execute();
         $lignes = $cmd->fetchAll(PDO::FETCH_OBJ);

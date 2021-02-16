@@ -7,7 +7,7 @@ class Medecin_Model extends My_Model {
     * @return array
     */
     public function getList() {
-        $query = "select id, nom, prenom from Medecin";
+        $query = "select id, nom, prenom from medecin";
         $cmd = $this->monPdo->prepare($query);
         $cmd->execute();
         $lignes = $cmd->fetchAll(PDO::FETCH_OBJ);
@@ -17,13 +17,28 @@ class Medecin_Model extends My_Model {
         }
         return $lignes;
     }
+
+    public function getCodePostal($codePostal){
+        $query = "select id, codePostal, nom, prenom from medecin where codePostal like :codePostal";
+        $cmd = $this->monPdo->prepare($query);
+        $cmd->bindValue("codePostal", $codePostal . '%');
+        $cmd->execute();
+        $ligne = $cmd->fetchAll(PDO::FETCH_OBJ);
+        $cmd->closeCursor();
+        if ( $ligne === false ) {
+            $ligne = null;
+        }
+        return $ligne;
+    }
+
+    
     /**
     * Fournit le médecin correspondant à l'id spécifié
     * @param string $id
     * @return stdClass ou null
     */
     public function getById($id) {
-        $query = "select * from Medecin where id = :id";
+        $query = "select * from medecin where id = :id";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue("id", $id);
         $cmd->execute();
@@ -36,6 +51,8 @@ class Medecin_Model extends My_Model {
     }
 
     public function update($id, $name, $prenom, $adresse, $codePostal, $ville, $tel, $email){
+
+        //modification de la table medecin
         $query = "UPDATE medecin 
         SET nom=:nom, 
         prenom=:prenom,
@@ -45,7 +62,11 @@ class Medecin_Model extends My_Model {
         tel=:tel,
         email=:email
         WHERE id=:id";
+
+        //Préparation de la requête
         $cmd = $this->monPdo->prepare($query);
+
+        //Lier un paramètre à un nom de variable spécifique
         $cmd->bindParam(":id", $id);
         $cmd->bindParam(":nom", $nom);
         $cmd->bindParam(":prenom", $prenom);
@@ -54,23 +75,14 @@ class Medecin_Model extends My_Model {
         $cmd->bindParam(":ville", $villes);
         $cmd->bindParam(":email", $email);
         $cmd->bindParam(":tel", $tel);
-        $cmd->bindParam(":specialiteComplementaire", $specialiteComplementaire);
-        $cmd->bindParam(":coefNotoriete", $coefNotoriete);
-        $cmd->bindParam(":estRemplacant", $estRemplacant);
 
+        //éxécution 
         $cmd->execute();
 
         $valueRow = $cmd->rowCount();
         $cmd->closeCursor();
 
-        return $valueRow;
-
-        
-        
-    }
-
-   
-
-    
+        return $valueRow;    
+    } 
 }
 ?>
