@@ -1,7 +1,6 @@
 <?php  if (!defined('BASEPATH'))   exit('No direct script access allowed');
 
 class Visiteur_Model extends My_Model {
-
     /**
     * Fournit les id, nom et prénom de tous les visiteurs
     * @return array

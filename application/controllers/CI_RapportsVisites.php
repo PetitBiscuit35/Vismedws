@@ -80,6 +80,5 @@ class CI_RapportsVisites extends My_Controller {
                 ->set_content_type('application/json', 'utf-8')
                 ->set_output($json);        
     }
-
 }
 ?>

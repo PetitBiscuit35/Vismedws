@@ -109,10 +109,10 @@ class CI_Visiteurs extends My_Controller {
     /**
      * Traite un appel mal formé où une valeur numérique pour l'id est attendu
      */
-    public function error404() {
-        $response = ["data" => "Id de ressource invalide ou inexistante"];
+    public function error404($id) {
+        $response = ["status" => "OK", "data" => "Id de ressource invalide ou inexistante"];
         $this->output
-                ->set_status_header(400)
+                ->set_status_header(404)
                 ->set_content_type('application/json', 'utf-8')
                 ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         
