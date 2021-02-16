@@ -14,7 +14,7 @@ class CI_Visiteurs extends My_Controller {
      * car toutes les méthodes en ont besoin
      */
     public function __construct() {
-        parent::__construct();    
+        parent::__construct();
     }
 
     /**

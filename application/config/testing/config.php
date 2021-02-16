@@ -23,9 +23,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://100.115.29.173/WS-VisMed/';
+$config['base_url'] = 'http:///100.115.29.168/sio2/arthurlevesque/WS-VisMed/';
 
 /*
+
 |--------------------------------------------------------------------------
 | Index File
 |--------------------------------------------------------------------------
