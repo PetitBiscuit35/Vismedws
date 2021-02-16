@@ -7,7 +7,7 @@ class Visiteur_Model extends My_Model {
     * @return array
     */
     public function getList() {
-        $query = "select id, nom, prenom from Visiteur";
+        $query = "select id, nom, prenom from visiteur";
         $cmd = $this->monPdo->prepare($query);
         $cmd->execute();
         $lignes = $cmd->fetchAll(PDO::FETCH_OBJ);
@@ -23,7 +23,7 @@ class Visiteur_Model extends My_Model {
     * @return stdClass ou null
     */
     public function getById($id) {
-        $query = "select * from Visiteur where id = :id";
+        $query = "select * from visiteur where id = :id";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue("id", $id);
         $cmd->execute();

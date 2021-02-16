@@ -6,7 +6,7 @@ class Medicament_Model extends My_Model {
     * @return stdClass
     */
     public function getList() {
-        $query = "select depotLegal, nomCommercial from Medicament";
+        $query = "select depotLegal, nomCommercial from medicament";
         $cmd = $this->monPdo->prepare($query);
         $cmd->execute();
         $lignes = $cmd->fetchAll(PDO::FETCH_OBJ);
@@ -23,7 +23,7 @@ class Medicament_Model extends My_Model {
     */
     public function getById($id) {
         $query = "select depotLegal, nomCommercial, codeFamille, composition "
-                . "from Medicament "
+                . "from medicament "
                 . "where depotLegal = :depotLegal";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue("depotLegal", $id);

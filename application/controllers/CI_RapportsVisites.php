@@ -24,6 +24,10 @@ class CI_RapportsVisites extends My_Controller {
      */
     public function getAll($idVisiteur) {
         $lesRapportsVisites = $this->mRapportVisite->getList($idVisiteur);
+        foreach ($lesRapportsVisites as $unRapport)
+        {
+            $unRapport->link=site_url()."/visiteurs/".$idVisiteur."/rapports/".$unRapport->id;
+        }
         $response = ["status" => "OK", "data" => $lesRapportsVisites];
         
         $this->setResponse(200, $response);
@@ -39,13 +43,22 @@ class CI_RapportsVisites extends My_Controller {
         $codeStatut = 200;
         $response = ["status" => "OK", "data" => $unRapport];
         $this->setResponse($codeStatut, $response);
-    }
+        if ($unRapport != null) {
+            $response = ["status" => "OK", "data" => $unVisiteur, "link" => site_url("/visiteurs/".$idVisiteur."/rapports/".$unRapport->id)];
+        
+            $this->output
+                    ->set_status_header(200)
+                    ->set_content_type('application/json', 'utf-8')
+                    ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+        else{
+            $response = ["status" => "Id de rapport de visite invalide ou inexistant"];
+            $this->output
+            ->set_status_header(404)
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
 
-    private function getSonRapport(string $idVisiteur) {
-        $rapport = $this->mRapportVisite->sonRapport($idVisiteur);
-        $codeStatut = 200;
-        $response = ["status" => "OK", "data" => $rapport];
-        $this->setResponse($codeStatut, $response);
     }
 
     /**

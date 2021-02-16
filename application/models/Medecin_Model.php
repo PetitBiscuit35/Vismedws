@@ -6,7 +6,7 @@ class Medecin_Model extends My_Model {
     * @return array
     */
     public function getList() {
-        $query = "select id, nom, prenom from Medecin";
+        $query = "select id, nom, prenom from medecin";
         $cmd = $this->monPdo->prepare($query);
         $cmd->execute();
         $lignes = $cmd->fetchAll(PDO::FETCH_OBJ);
@@ -22,7 +22,7 @@ class Medecin_Model extends My_Model {
     * @return stdClass ou null
     */
     public function getById($id) {
-        $query = "select id, nom, prenom, email from Medecin where id = :id";
+        $query = "select id, nom, prenom, email from medecin where id = :id";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue("id", $id);
         $cmd->execute();
