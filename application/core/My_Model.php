@@ -1,12 +1,13 @@
 <?php  if (!defined('BASEPATH'))   exit('No direct script access allowed');
 
-abstract class My_Model extends CI_Model {
-    protected $monPdo;
+abstract class My_Model extends CI_Model { 
+protected $monPdo; // @var PDO $monPDO
     /**
-   
+     * Initialise une instance de la classe Medecin_Model
+     * - Récupère les paramètres de configuration liés au serveur MySql
+     * - Prépare les requêtes SQL qui comportent des parties variables
      */
     public function __construct() {
-
          parent::__construct();
         // demande à charger les paramètres de configuration du fichier models.php
         $this->config->load("models");
@@ -28,11 +29,4 @@ abstract class My_Model extends CI_Model {
                 throw new Exception("Base de données inaccessible");
         }
     }
-
-    
-
-
-
-
 }
-?>

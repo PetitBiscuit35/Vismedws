@@ -54,10 +54,12 @@ abstract class My_Controller extends CI_Controller {
         ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) 
         ->_display();
         die();
+
+        */
       }
-      elseif(empty($password))
+      elseif (empty($password))
       {
-        $response = ["status" => "NO", "data" => "Unauthorized"];
+        $response = ["status" => "NO", "data" => "Accès refusé - identifiant ou mot de passe vide "];
         $json = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         $this->output
@@ -67,10 +69,20 @@ abstract class My_Controller extends CI_Controller {
         ->_display();
         die();
       }
-      
-    }
-    
+      /* 
+      else 
+      {
+        $response = ["status" => "NO", "data" => "Accès refusé - invalide"];
+        $json = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
+        $this->output
+        ->set_status_header(403)
+        ->set_content_type('application/json','utf-8')
+        ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) 
+        ->_display();
+        die();
+      } */
+  }
 }
 
 
