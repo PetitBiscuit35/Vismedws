@@ -40,16 +40,11 @@ class Visiteur_Model extends My_Model {
     */
     public function getByCredentials($login, $password) {
 
-        $query = "select login, mdp from Visiteur where login = :login AND mdp = :mdp";
-
+        $query = "select login, mdp from visiteur where login = :login AND mdp = :mdp";
         $cmd = $this->monPdo->prepare($query);
-
         $cmd->bindValue("login", $login);
-
         $cmd->bindValue("mdp", $password);
-
         $cmd->execute();
-
         $ligne = $cmd->fetch(PDO::FETCH_OBJ);
 
         return $ligne;

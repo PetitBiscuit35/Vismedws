@@ -5,8 +5,6 @@ abstract class My_Controller extends CI_Controller {
   public function __construct() 
   {
     parent::__construct();
-
-    
     $this->load->model('Visiteur_Model', 'mVisiteur');
 
     $chaine64 = substr($this->input->get_request_header("Authorization", TRUE), 6);
