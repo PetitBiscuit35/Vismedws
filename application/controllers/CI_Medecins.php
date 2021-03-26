@@ -41,8 +41,6 @@ class CI_Medecins extends My_Controller {
 
         foreach($tab as $unMedecin){
             $unMedecin->link=site_url()."/medecins/".$unMedecin->id;
-
-          
         }
         $response = ["status" => "OK" , "data"=>$tab];
         $json = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -58,7 +56,7 @@ class CI_Medecins extends My_Controller {
      * Prépare et envoie la réponse http : code statut, contenu
      * @param string $id
      */
- /*   public function getOne($id) {
+   public function getOne($id) {
         $unMedecin = $this->mMedecin->getById($id);
         if($unMedecin != null){
             $response = ["status" => "OK", "data"=>$unMedecin,"link" => site_url("/medecins/". $id)];
@@ -75,19 +73,19 @@ class CI_Medecins extends My_Controller {
                     ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         }
         
-    }*/
+    }
 
     public function getPostal($codePostal){
         $unMedecin = $this->mMedecin->getCodePostal($codePostal);
         if($unMedecin != null){
-            $response = ["status" => "OK", "data"=>$unMedecin,"link" => site_url("/medecins/". $codePostal)];
+            $response = ["status" => "OK", "data"=>$unMedecin,"link" => site_url("/medecins/departement/". $codePostal)];
         $this->output
                 ->set_status_header(200)
                 ->set_content_type('application/json', 'utf-8')
                 ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
         }else{
-            $response = ["status" => "erreur id medecin"];
+            $response = ["status" => "Erreur département médecin"];
             $this->output
                     ->set_status_header(404)
                     ->set_content_type('application/json', 'utf-8')
@@ -95,10 +93,36 @@ class CI_Medecins extends My_Controller {
         }
     }
 
+    public function getAllDepartement(){
+    
+        $tab= $this->mMedecin->getListDepartement();
+        
+        if ($tab != null) {
+            $response = ["status" => "OK" , "data"=>$tab, "link" => site_url("/medecins/departement")];
+        
+        $json = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $this->output
+                ->set_status_header(200)
+                ->set_content_type('application/json', 'utf-8')
+                ->set_output($json);
+            }
+        else{
+            $response = ["status" => "Erreur département médecin"];
+            $this->output
+                    ->set_status_header(404)
+                    ->set_content_type('application/json', 'utf-8')
+                    ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+    
+    }
+    
+
+
+
     public function update($id){
         
-        // récupération des données du corps (body) de la requête
-        $name = $this->input->input_stream("name");
+        // Récupération des données du corps (body) de la requête
+        $nom = $this->input->input_stream("nom");
         $prenom = $this->input->input_stream("prenom");
         $adresse = $this->input->input_stream("adresse");
         $codePostal = $this->input->input_stream("codePostal");
@@ -110,17 +134,21 @@ class CI_Medecins extends My_Controller {
         $tab= $this->input->input_stream();
         $this->form_validation->set_data($tab);
         
-        $this->form_validation->set_rules('name','name','required|max_length[30]');
-        $this->form_validation->set_rules('codePostal','codePostal','required|integer');
-        $this->form_validation->set_rules('prenom','prenom','required|max_length[256]');
+        $this->form_validation->set_rules('nom','nom','required|max_length[50]');
+        $this->form_validation->set_rules('prenom','prenom','required|max_length[50]');
+        $this->form_validation->set_rules('adresse','adresse','required|max_length[100]');
+        $this->form_validation->set_rules('codePostal','codePostal','required|integer|max_length[5]');
+        $this->form_validation->set_rules('ville','ville','required|max_length[50]');
+        $this->form_validation->set_rules('tel','tel','required|integer|max_length[10]');
+        $this->form_validation->set_rules('email','email','required|max_length[50]');
 
         // conversion de l'id et de la capacité en valeurs entières
         if($this->form_validation->run()){
             $id = intval($id);
     
             // mise à jour dans le modèle
-            $result = $this->mMedecin->update($id, $name, $prenom, $adresse, $codePostal, $ville, $tel, $email);
-            $response = ["status" => "medecin modifié " . $id ,
+            $result = $this->mMedecin->update($id, $nom, $prenom, $adresse, $codePostal, $ville, $tel, $email);
+            $response = ["status" => "Médecin n°" . $id . " modifié " ,
                          "data" => [ "link" => site_url("/medecins/" . $id) ]
                         ];
             $this->output

@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/sio2/arthurlevesque/WS-VisMed';
+$config['base_url'] = 'https://localhost/sio2/simon/ppe31_vismedws_gr2';
 /*
 |--------------------------------------------------------------------------
 | Index File

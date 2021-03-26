@@ -5,11 +5,16 @@ abstract class My_Controller extends CI_Controller {
   public function __construct() 
   {
     parent::__construct();
-    
-    try{
+
+    try
+    {
+      $chaine64 = substr($this->input->get_request_header("Authorization", TRUE), 6);
+
       $this->load->model('Visiteur_Model', 'mVisiteur');
-    }catch(Exception $e){
-      $response = ["status" => "Base de données inaccessible" , "data"=>null];
+    }
+    catch(Exception $e)
+    {
+      $response = ["status" => "Base de données inaccessible" , "data"=> null];
             $json = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             $this->output
             ->set_status_header(500)
@@ -18,11 +23,6 @@ abstract class My_Controller extends CI_Controller {
             ->_display();
             die();
     }
-    
-    
-   
-
-    $chaine64 = substr($this->input->get_request_header("Authorization", TRUE), 6);
 
     if (empty($chaine64) === TRUE ) 
     {
@@ -39,6 +39,7 @@ abstract class My_Controller extends CI_Controller {
 
       $password = $chaineadiviser[1];
     }
+    
 
     $tab = $this->mVisiteur->getByCredentials($login,$password);
 
@@ -54,8 +55,6 @@ abstract class My_Controller extends CI_Controller {
         ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) 
         ->_display();
         die();
-
-        */
       }
       elseif (empty($password))
       {

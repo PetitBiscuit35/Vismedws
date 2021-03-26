@@ -44,7 +44,7 @@ class CI_RapportsVisites extends My_Controller {
         $response = ["status" => "OK", "data" => $unRapport];
         $this->setResponse($codeStatut, $response);
         if ($unRapport != null) {
-            $response = ["status" => "OK", "data" => $unVisiteur, "link" => site_url("/visiteurs/".$idVisiteur."/rapports/".$unRapport->id)];
+            $response = ["status" => "OK", "data" => $unRapport, "link" => site_url("/visiteurs/".$idVisiteur."/rapports/".$unRapport->id)];
         
             $this->output
                     ->set_status_header(200)
@@ -60,6 +60,46 @@ class CI_RapportsVisites extends My_Controller {
         }
 
     }
+
+    public function addRapport($idVisiteur) {
+
+        $idMedecin = $this->input->input_stream("idMedecin");
+        $dateVisite = $this->input->input_stream("dateVisite");
+        $dateCreaRapport = $this->input->input_stream("dateCreaRapport");
+        $bilan = $this->input->input_stream("bilan");
+        $coefConfiance = $this->input->input_stream("coefConfiance");
+        $idMotifVisite = $this->input->input_stream("idMotifVisite");
+
+        $this->load->library('form_validation');
+        $tab= $this->input->input_stream();
+        $this->form_validation->set_data($tab);
+        
+        $this->form_validation->set_rules('idMedecin','idMedecin','integer[11]');
+        $this->form_validation->set_rules('dateVisite','dateVisite','date');
+        $this->form_validation->set_rules('dateCreaRapport','dateCreaRapport','date');
+        $this->form_validation->set_rules('bilan','bilan','max_length[255]');
+        $this->form_validation->set_rules('coefConfiance','coefConfiance','integer[4]');
+        $this->form_validation->set_rules('idMotifVisite','idMotifVisite','integer[11]');
+        
+        if($this->form_validation->run()) 
+        {
+            $newRapport = $this->mRapportVisite->addNewRapport($idVisiteur, $idMedecin, $dateVisite, $dateCreaRapport, $bilan, $coefConfiance, $idMotifVisite);
+            $codeStatut = 200;
+            $response = ["status" => "OK", "data" => $idVisiteur];
+            $this->setResponse($codeStatut, $response);
+        }
+        else 
+        {
+            $response = ["status" => "Les données du rapport sont invalides",
+            "errors"=>$this->form_validation->error_array()];
+                        
+            $this->output
+                ->set_status_header(400)
+                ->set_content_type('application/json', 'utf-8')
+                ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+    }
+
 
     /**
      * Traite un appel mal formé où une valeur numérique pour l'id est attendu

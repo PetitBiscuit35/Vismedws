@@ -31,6 +31,17 @@ class Medecin_Model extends My_Model {
         return $ligne;
     }
 
+    public function getListDepartement() {
+        $query = "select distinct substr(codePostal, 1, 2) AS noDepts from medecin ORDER BY codePostal ASC";
+        $cmd = $this->monPdo->prepare($query);
+        $cmd->execute();
+        $ligne = $cmd->fetchAll(PDO::FETCH_OBJ);
+        $cmd->closeCursor();
+        if ( $ligne === false ) {
+            $ligne = null;
+        }
+        return $ligne;
+    }
     
     /**
     * Fournit le médecin correspondant à l'id spécifié
@@ -50,7 +61,7 @@ class Medecin_Model extends My_Model {
         return $ligne;
     }
 
-    public function update($id, $name, $prenom, $adresse, $codePostal, $ville, $tel, $email){
+    public function update($id, $nom, $prenom, $adresse, $codePostal, $ville, $tel, $email){
 
         //modification de la table medecin
         $query = "UPDATE medecin 
@@ -72,11 +83,10 @@ class Medecin_Model extends My_Model {
         $cmd->bindParam(":prenom", $prenom);
         $cmd->bindParam(":adresse", $adresse);
         $cmd->bindParam(":codePostal", $codePostal);
-        $cmd->bindParam(":ville", $villes);
+        $cmd->bindParam(":ville", $ville);
         $cmd->bindParam(":email", $email);
         $cmd->bindParam(":tel", $tel);
 
-        //éxécution 
         $cmd->execute();
 
         $valueRow = $cmd->rowCount();
