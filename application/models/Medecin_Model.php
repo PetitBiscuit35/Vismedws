@@ -93,6 +93,6 @@ class Medecin_Model extends My_Model {
         $cmd->closeCursor();
 
         return $valueRow;    
-    } 
+    }
 }
 ?>
