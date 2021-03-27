@@ -43,13 +43,33 @@ class Medicament_Model extends My_Model {
     */
     public function update($depotLegal, $nomCommercial, $composition, $effets, $contreIndic, $prixEchantillon){
 
-        $query = "update medicament set 
-        nomCommercial=:nomCommercial, 
-        composition=:composition,
-        effets=:effets, 
-        contreIndic=:contreIndic,
-        prixEchantillon=:prixEchantillon
-        where depotLegal like :depotLegal;";
+        $unMedicament = $this->mMedicament->getById($depotLegal);
+
+        if($nomCommercial == NULL) 
+            {
+               $nomCommercial = $unMedicament->nomCommercial;
+            }
+    
+            if($composition == NULL)
+            {
+                $composition = $unMedicament->composition;
+            }
+    
+            if($effets == NULL) 
+            {
+                $effets = $unMedicament->effets;
+            }
+    
+            if($contreIndic == NULL) 
+            {
+                $contreIndic = $unMedicament->contreIndic;
+            }
+    
+            if($prixEchantillon == NULL) {
+                $prixEchantillon = $unMedicament->prixEchantillon;
+            }
+
+        $query = "update medicament set nomCommercial=:nomCommercial, composition=:composition, effets=:effets, contreIndic=:contreIndic, prixEchantillon=:prixEchantillon where depotLegal like :depotLegal;";
 
         $cmd = $this->monPdo->prepare($query);
         
@@ -61,7 +81,6 @@ class Medicament_Model extends My_Model {
         $cmd->bindValue(":prixEchantillon", $prixEchantillon, PDO::PARAM_INT);
 
         $cmd->execute();
-
         $valueRow = $cmd->rowCount();
         $cmd->closeCursor();
 
