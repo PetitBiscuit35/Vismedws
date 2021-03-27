@@ -18,6 +18,9 @@ class Medecin_Model extends My_Model {
         return $lignes;
     }
 
+    /**
+     * Renvoit les médecins correspondants au code postal spécifié
+     */
     public function getCodePostal($codePostal){
         $query = "select id, codePostal, nom, prenom from medecin where codePostal like :codePostal";
         $cmd = $this->monPdo->prepare($query);
@@ -31,6 +34,9 @@ class Medecin_Model extends My_Model {
         return $ligne;
     }
 
+    /**
+     * Renvoit les 2 premiers chiffres de tous les codes postaux
+     */
     public function getListDepartement() {
         $query = "select distinct substr(codePostal, 1, 2) AS noDepts from medecin ORDER BY codePostal ASC";
         $cmd = $this->monPdo->prepare($query);
@@ -61,9 +67,12 @@ class Medecin_Model extends My_Model {
         return $ligne;
     }
 
+    /**
+     * Permet de mettre à jour les informations d'un médecin spécifié par son id
+     */
     public function update($id, $nom, $prenom, $adresse, $codePostal, $ville, $tel, $email){
 
-        //modification de la table medecin
+        // Modification de la table medecin
         $query = "UPDATE medecin 
         SET nom=:nom, 
         prenom=:prenom,
@@ -74,10 +83,10 @@ class Medecin_Model extends My_Model {
         email=:email
         WHERE id=:id";
 
-        //Préparation de la requête
+        // Préparation de la requête
         $cmd = $this->monPdo->prepare($query);
 
-        //Lier un paramètre à un nom de variable spécifique
+        // Lier un paramètre à un nom de variable spécifique
         $cmd->bindParam(":id", $id);
         $cmd->bindParam(":nom", $nom);
         $cmd->bindParam(":prenom", $prenom);
@@ -86,9 +95,7 @@ class Medecin_Model extends My_Model {
         $cmd->bindParam(":ville", $ville);
         $cmd->bindParam(":email", $email);
         $cmd->bindParam(":tel", $tel);
-
         $cmd->execute();
-
         $valueRow = $cmd->rowCount();
         $cmd->closeCursor();
 

@@ -34,8 +34,12 @@ class Visiteur_Model extends My_Model {
         return $ligne;
     }
 
+    /**
+     * Permet de mettre à jour les informations d'un visiteur
+     */
     public function update($id, $nom, $prenom, $adresse, $cp, $ville){
 
+        // Permet de laisser les champs comme avant si on ne modifie par toutes les informations
         $unVisiteur = $this->mVisiteur->getById($id);
         
             if($nom == NULL) 
@@ -72,17 +76,15 @@ class Visiteur_Model extends My_Model {
         $cmd->bindValue(":adresse", $adresse);
         $cmd->bindValue(":cp", $cp);
         $cmd->bindValue(":ville", $ville);
-
         $cmd->execute();
         $valueRow = $cmd->rowCount();
         $cmd->closeCursor();
 
         return $valueRow;        
-        
     }
 
-        /**
-    * Fournit le visiteur correspondant à l'id spécifié
+    /**
+    * Vérifie si l'utilisateur et le mot de passe correspondent à ceux dans la base de données
     * @param string $id
     * @return stdClass ou null
     */
