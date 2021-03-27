@@ -115,9 +115,6 @@ class CI_Medecins extends My_Controller {
         }
     
     }
-    
-
-
 
     public function update($id){
         
@@ -183,7 +180,6 @@ class CI_Medecins extends My_Controller {
     }
 }
 
-
     /**
      * Traite un appel mal formé où une valeur numérique pour l'id est attendu
      */
@@ -193,7 +189,6 @@ class CI_Medecins extends My_Controller {
                 ->set_status_header(404)
                 ->set_content_type('application/json', 'utf-8')
                 ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-        
     }
 }
 ?>

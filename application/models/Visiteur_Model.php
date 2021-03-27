@@ -34,21 +34,46 @@ class Visiteur_Model extends My_Model {
         return $ligne;
     }
 
-    public function update($id, $nom, $prenom, $adresse, $cp, $ville, $dateEmbauche){
+    public function update($id, $nom, $prenom, $adresse, $cp, $ville){
 
-        $query = "update visiteur set nom=:nom, prenom=:prenom, adresse=:adresse, cp=:cp, ville=:ville, dateEmbauche=:dateEmbauche where id like :id";
+        $unVisiteur = $this->mVisiteur->getById($id);
+        
+            if($nom == NULL) 
+            {
+               $nom = $unVisiteur->nom;
+            }
+    
+            if($prenom == NULL)
+            {
+                $prenom = $unVisiteur->prenom;
+            }
+    
+            if($adresse == NULL) 
+            {
+                $adresse = $unVisiteur->adresse;
+            }
+    
+            if($cp == NULL) 
+            {
+                $cp = $unVisiteur->cp;
+            }
+    
+            if($ville == NULL) {
+                $ville = $unVisiteur->ville;
+            }
+
+        $query = "update visiteur set nom=:nom, prenom=:prenom, adresse=:adresse, cp=:cp, ville=:ville where id like :id";
 
         $cmd = $this->monPdo->prepare($query);
+
         $cmd->bindValue(":id", $id);
         $cmd->bindValue(":nom", $nom);
         $cmd->bindValue(":prenom", $prenom);
         $cmd->bindValue(":adresse", $adresse);
         $cmd->bindValue(":cp", $cp);
         $cmd->bindValue(":ville", $ville);
-        $cmd->bindValue(":dateEmbauche", $dateEmbauche);
 
         $cmd->execute();
-
         $valueRow = $cmd->rowCount();
         $cmd->closeCursor();
 

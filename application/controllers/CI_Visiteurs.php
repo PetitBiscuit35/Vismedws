@@ -63,29 +63,30 @@ class CI_Visiteurs extends My_Controller {
     }
 
     
-    public function update($id){
-        
+    public function update($id)
+    {
         // récupération des données du corps (body) de la requête
         $nom = $this->input->input_stream("nom");
         $prenom = $this->input->input_stream("prenom");
         $adresse = $this->input->input_stream("adresse");
         $cp = $this->input->input_stream("cp");
         $ville = $this->input->input_stream("ville");
-        $dateEmbauche = $this->input->input_stream("dateEmbauche");
 
         $this->load->library('form_validation');
         $tab= $this->input->input_stream();
         $this->form_validation->set_data($tab);
         
-        $this->form_validation->set_rules('nom','nom','required|max_length[30]');
-        $this->form_validation->set_rules('cp','cp','required|integer');
-        $this->form_validation->set_rules('prenom','prenom','required|max_length[256]');
+        $this->form_validation->set_rules('nom','nom','max_length[30]');
+        $this->form_validation->set_rules('prenom','prenom','max_length[30]');
+        $this->form_validation->set_rules('adresse','adresse','max_length[30]');
+        $this->form_validation->set_rules('cp','cp','integer|min_length[5]|max_length[5]');
+        $this->form_validation->set_rules('ville','ville','max_length[30]');
 
         // conversion de l'id et de la capacité en valeurs entières
         if($this->form_validation->run()){
    
             // mise à jour dans le modèle
-            $result = $this->mVisiteur->update($id, $nom, $prenom, $adresse, $cp, $ville, $dateEmbauche);
+            $result = $this->mVisiteur->update($id, $nom, $prenom, $adresse, $cp, $ville);
             $response = ["status" => "Visiteur modifié " . $id ,
                          "data" => [ "link" => site_url("/visiteurs/" . $id) ]
                         ];
