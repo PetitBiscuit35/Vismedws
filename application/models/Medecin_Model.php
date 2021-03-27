@@ -72,16 +72,43 @@ class Medecin_Model extends My_Model {
      */
     public function update($id, $nom, $prenom, $adresse, $codePostal, $ville, $tel, $email){
 
+        $unMedecin = $this->mMedecin->getById($id);
+
+        if($nom == NULL) 
+            {
+               $nom = $unMedecin->nom;
+            }
+    
+            if($prenom == NULL)
+            {
+                $prenom = $unMedecin->prenom;
+            }
+    
+            if($adresse == NULL) 
+            {
+                $adresse = $unMedecin->adresse;
+            }
+    
+            if($codePostal == NULL) 
+            {
+                $codePostal = $unMedecin->codePostal;
+            }
+    
+            if($ville == NULL) {
+                $ville = $unMedecin->ville;
+            }
+
+            if($email == NULL) {
+                $email = $unMedecin->email;
+            }
+
+            if($tel == NULL) {
+                $tel = $unMedecin->tel;
+            }
+
         // Modification de la table medecin
         $query = "UPDATE medecin 
-        SET nom=:nom, 
-        prenom=:prenom,
-        adresse=:adresse, 
-        codePostal=:codePostal,
-        ville=:ville,
-        tel=:tel,
-        email=:email
-        WHERE id=:id";
+        SET nom=:nom, prenom=:prenom, adresse=:adresse, codePostal=:codePostal, ville=:ville, tel=:tel, email=:email WHERE id=:id";
 
         // Préparation de la requête
         $cmd = $this->monPdo->prepare($query);
