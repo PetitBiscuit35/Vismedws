@@ -22,7 +22,7 @@ class Medecin_Model extends My_Model {
      * Renvoit les médecins correspondants au code postal spécifié
      */
     public function getCodePostal($codePostal){
-        $query = "select id, codePostal, nom, prenom from medecin where codePostal like :codePostal";
+        $query = "select id, codePostal, nom, prenom, adresse, ville, tel, email, specialiteComplementaire, coefNotoriete, estRemplacant from medecin where codePostal like :codePostal";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue("codePostal", $codePostal . '%');
         $cmd->execute();
