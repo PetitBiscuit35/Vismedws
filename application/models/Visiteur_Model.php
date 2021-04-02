@@ -2,7 +2,7 @@
 
 class Visiteur_Model extends My_Model {
     /**
-    * Fournit les id, nom et prénom de tous les visiteurs
+    * Fournit les id, nom et prénom de tous les Visiteurs
     * @return array
     */
     public function getList() {
@@ -17,7 +17,7 @@ class Visiteur_Model extends My_Model {
         return $lignes;
     }
     /**
-    * Fournit le visiteur correspondant à l'id spécifié
+    * Fournit le Visiteur correspondant à l'id spécifié
     * @param string $id
     * @return stdClass ou null
     */
@@ -35,7 +35,7 @@ class Visiteur_Model extends My_Model {
     }
 
     /**
-     * Permet de mettre à jour les informations d'un visiteur
+     * Permet de mettre à jour les informations d'un Visiteur
      */
     public function update($id, $nom, $prenom, $adresse, $cp, $ville){
 
