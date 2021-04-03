@@ -11,4 +11,3 @@ $config['username'] = 'userGsb';
 $config['password'] = 'secret';
 $config['database'] = 'gsbfrais';
 $config['dbdriver'] = 'mysql';
-?>

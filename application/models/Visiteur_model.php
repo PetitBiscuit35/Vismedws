@@ -1,40 +1,12 @@
 <?php  if (!defined('BASEPATH'))   exit('No direct script access allowed');
 
-class Visiteur_Model extends CI_Model {
-    private  $monPdo; // @var PDO $monPDO
+class Visiteur_Model extends My_Model {
     /**
-     * Initialise une instance de la classe Visiteur_Model
-     * - Récupère les paramètres de configuration liés au serveur MySql
-     * - Prépare les requêtes SQL qui comportent des parties variables
-     */
-    public function __construct() {
-         parent::__construct();
-        // demande à charger les paramètres de configuration du fichier models.php
-        $this->config->load("models");
-        $server = $this->config->item("hostname");
-        $bdd = $this->config->item("database");
-        $user = $this->config->item("username");
-        $mdp = $this->config->item("password");
-        $driver = $this->config->item("dbdriver");
-
-        // ouverture d'une connexion vers le serveur MySql dont la configuration vient d'être chargée
-        try {
-                $this->monPdo = new PDO($driver . ":host=" . $server . ";dbname=" . $bdd, 
-                                                        $user, $mdp, 
-                                                        array(PDO::MYSQL_ATTR_INIT_COMMAND=>"SET NAMES 'UTF8'",
-                                                              PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));	
-        }
-        catch (Exception $e) {
-                log_message('error', $e->getMessage());
-                throw new Exception("Base de données inaccessible");
-        }
-    }
-    /**
-    * Fournit les id, nom et prénom de tous les visiteurs
+    * Fournit les id, nom et prénom de tous les Visiteurs
     * @return array
     */
     public function getList() {
-        $query = "select id, nom, prenom from Visiteur";
+        $query = "select id, nom, prenom from visiteur";
         $cmd = $this->monPdo->prepare($query);
         $cmd->execute();
         $lignes = $cmd->fetchAll(PDO::FETCH_OBJ);
@@ -45,12 +17,12 @@ class Visiteur_Model extends CI_Model {
         return $lignes;
     }
     /**
-    * Fournit le visiteur correspondant à l'id spécifié
+    * Fournit le Visiteur correspondant à l'id spécifié
     * @param string $id
     * @return stdClass ou null
     */
     public function getById($id) {
-        $query = "select id, nom, prenom, login from visiteur where id = :id";
+        $query = "select * from visiteur where id = :id";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue("id", $id);
         $cmd->execute();
@@ -61,5 +33,72 @@ class Visiteur_Model extends CI_Model {
         }
         return $ligne;
     }
+
+    /**
+     * Permet de mettre à jour les informations d'un Visiteur
+     */
+    public function update($id, $nom, $prenom, $adresse, $cp, $ville){
+
+        // Permet de laisser les champs comme avant si on ne modifie par toutes les informations
+        $unVisiteur = $this->mVisiteur->getById($id);
+        
+            if($nom == NULL) 
+            {
+               $nom = $unVisiteur->nom;
+            }
+    
+            if($prenom == NULL)
+            {
+                $prenom = $unVisiteur->prenom;
+            }
+    
+            if($adresse == NULL) 
+            {
+                $adresse = $unVisiteur->adresse;
+            }
+    
+            if($cp == NULL) 
+            {
+                $cp = $unVisiteur->cp;
+            }
+    
+            if($ville == NULL) {
+                $ville = $unVisiteur->ville;
+            }
+
+        $query = "update visiteur set nom=:nom, prenom=:prenom, adresse=:adresse, cp=:cp, ville=:ville where id like :id";
+
+        $cmd = $this->monPdo->prepare($query);
+
+        $cmd->bindValue(":id", $id);
+        $cmd->bindValue(":nom", $nom);
+        $cmd->bindValue(":prenom", $prenom);
+        $cmd->bindValue(":adresse", $adresse);
+        $cmd->bindValue(":cp", $cp);
+        $cmd->bindValue(":ville", $ville);
+        $cmd->execute();
+        $valueRow = $cmd->rowCount();
+        $cmd->closeCursor();
+
+        return $valueRow;        
+    }
+
+    /**
+    * Vérifie si l'utilisateur et le mot de passe correspondent à ceux dans la base de données
+    * @param string $id
+    * @return stdClass ou null
+    */
+    public function getByCredentials($login, $mdp){
+        $query = "select id, nom, prenom, login, adresse, cp, ville, dateEmbauche from visiteur where login = :login and mdp = :mdp";
+        $cmd = $this->monPdo->prepare($query);
+        $cmd->bindValue("login", $login);
+        $cmd->bindValue("mdp", $mdp);
+        $cmd->execute();
+        $ligne = $cmd->fetch(PDO::FETCH_OBJ);
+        $cmd->closeCursor();
+    
+        return $ligne;
+    }
+
 }
 ?>

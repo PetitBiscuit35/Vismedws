@@ -7,7 +7,7 @@ if (!defined('BASEPATH'))
  * @author baraban
  *
  */
-class CI_Visiteurs extends CI_Controller {
+class CI_Visiteurs extends My_Controller {
     /**
      * Initialise le contrôleur CI_Visiteurs
      * Le modèle est chargé dès la création du contrôleur
@@ -15,7 +15,6 @@ class CI_Visiteurs extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
-        $this->load->model('Visiteur_model', 'mVisiteur');    
     }
 
     /**
@@ -24,6 +23,12 @@ class CI_Visiteurs extends CI_Controller {
      */
     public function getAll() {
         $tab = $this->mVisiteur->getList();
+
+        foreach ($tab as $unVisiteur)
+        {
+            $unVisiteur->link=site_url()."/visiteurs/".$unVisiteur->id;
+        }
+
         $response = ["status" => "OK", "data" => $tab];
         $json = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $this->output
@@ -39,12 +44,68 @@ class CI_Visiteurs extends CI_Controller {
      */
     public function getOne($id) {
         $unVisiteur = $this->mVisiteur->getById($id);
-        $response = ["status" => "OK", "data" => $unVisiteur];
+        if ($unVisiteur != null) {
+            $response = ["status" => "OK", "data" => $unVisiteur, "link" => site_url("/visiteurs/" . $id)];
         
-        $this->output
-                ->set_status_header(200)
-                ->set_content_type('application/json', 'utf-8')
-                ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            $this->output
+                    ->set_status_header(200)
+                    ->set_content_type('application/json', 'utf-8')
+                    ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+        else{
+            $response = ["status" => "Id de visiteur invalide ou inexistant"];
+            $this->output
+            ->set_status_header(404)
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+
+    }
+
+    
+    public function update($id)
+    {
+        // récupération des données du corps (body) de la requête
+        $nom = $this->input->input_stream("nom");
+        $prenom = $this->input->input_stream("prenom");
+        $adresse = $this->input->input_stream("adresse");
+        $cp = $this->input->input_stream("cp");
+        $ville = $this->input->input_stream("ville");
+
+        $this->load->library('form_validation');
+        $tab= $this->input->input_stream();
+        $this->form_validation->set_data($tab);
+        
+        $this->form_validation->set_rules('nom','nom','max_length[30]');
+        $this->form_validation->set_rules('prenom','prenom','max_length[30]');
+        $this->form_validation->set_rules('adresse','adresse','max_length[30]');
+        $this->form_validation->set_rules('cp','cp','integer|min_length[5]|max_length[5]');
+        $this->form_validation->set_rules('ville','ville','max_length[30]');
+
+        // conversion de l'id et de la capacité en valeurs entières
+        if($this->form_validation->run()){
+   
+            // mise à jour dans le modèle
+            $result = $this->mVisiteur->update($id, $nom, $prenom, $adresse, $cp, $ville);
+            $response = ["status" => "Visiteur modifié " . $id ,
+                         "data" => [ "link" => site_url("/visiteurs/" . $id) ]
+                        ];
+            $this->output
+                    ->set_status_header(200)
+                    ->set_content_type('application/json', 'utf-8')
+                    ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+        else{
+            $response = ["status" => "Les données de l'utilisateur sont invalides",
+            "errors"=>$this->form_validation->error_array()];
+                        
+            $this->output
+                    ->set_status_header(400)
+                    ->set_content_type('application/json', 'utf-8')
+                    ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+    }
+
     }
     /**
      * Traite un appel mal formé où une valeur numérique pour l'id est attendu

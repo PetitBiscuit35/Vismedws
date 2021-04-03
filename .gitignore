@@ -29,5 +29,12 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 /tests/tests/
 /tests/results/
+
+
 .vscode/
-.editconfig
+phpunit.xml
+classes/
+pageTestTableARP.php
+unittest/
+.phpunit.result.cache
+.editorconfig
