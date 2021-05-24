@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -57,6 +57,9 @@ $route['medecins/(:num)']['get'] = 'CI_Medecins/getOne/$1';
 // WORKING - Trouver les médecins en fonction d'un code postal donné
 $route['medecins/departement/(:num)']['get'] = 'CI_Medecins/getPostal/$1';
 
+// WORKING - Trouver les médecins en fonction de la specialité
+$route['medecins/specialiteComplementaire/(:any)']['get'] = 'CI_Medecins/getSpecialite/$1';
+
 // WORKING - (Pour l'application Android)
 $route['medecins/departement']['get'] = 'CI_Medecins/getAllDepartement';
 
@@ -64,6 +67,12 @@ $route['medecins/departement']['get'] = 'CI_Medecins/getAllDepartement';
 $route['medecins/(:num)']['put'] = 'CI_Medecins/update/$1';
 
 $route['medecins/(:any)']['get'] = 'CI_Medecins/error404/$1';
+
+// WORKING - Supprimer un médecin
+$route['medecins/(:num)']['delete'] = 'CI_Medecins/delete/$1';
+
+// WORKING - Ajout d'un médecin
+$route['medecins']['post'] = 'CI_Medecins/addMedecin';
 
 // ROUTES VISITEURS
 $route['visiteurs']['get'] = 'CI_Visiteurs/getAll';
