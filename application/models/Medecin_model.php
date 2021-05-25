@@ -179,8 +179,9 @@ class Medecin_Model extends My_Model
         $cmd->execute();
     }
 
+
     /**
-     * Suppression d'un médecin
+     * Suppression d'un médecin  sdsd
      */
     public function delete($id)
     {
