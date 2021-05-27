@@ -6,7 +6,7 @@ class RapportVisite_Model extends My_Model {
     * @return array
     */
     public function getList($idVisiteur) : array {
-        $query = "select id, idMedecin, dateVisite, idMotifVisite from rapportvisite where idVisiteur = ?";
+        $query = "select id, idMedecin, dateVisite, idMotifVisite from rapportvisite where idVisiteur = ? and etatArchive is false";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue(1, $idVisiteur);
         $cmd->execute();
@@ -24,7 +24,7 @@ class RapportVisite_Model extends My_Model {
     */
     public function getById($idVisiteur, $idRapport) {
         $query = "select id, idMedecin, dateVisite, idMotifVisite from rapportvisite 
-                    where idVisiteur = ? and id = ?";
+                    where idVisiteur = ? and id = ? and etatArchive is false";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue(1, $idVisiteur);
         $cmd->bindValue(2, $idRapport);
@@ -43,7 +43,7 @@ class RapportVisite_Model extends My_Model {
     * @return stdClass ou null
     */
     public function getDernierRapport($idVisiteur) {
-        $query = "select id from rapportvisite where idVisiteur = ? order by id desc";
+        $query = "select id from rapportvisite where idVisiteur = ? and etatArchive is false order by id desc";
         $cmd = $this->monPdo->prepare($query);
         $cmd->bindValue(1, $idVisiteur);
         $cmd->execute();
@@ -63,8 +63,8 @@ class RapportVisite_Model extends My_Model {
     */
     public function addNewRapport($idVisiteur, $idMedecin, $dateVisite, $dateCreaRapport, $bilan, $coefConfiance, $idMotifVisite) {
 
-        $query = "insert into rapportvisite (idVisiteur, id, idMedecin, dateVisite, dateCreaRapport, bilan, coefConfiance, idMotifVisite)
-        values (:idVisiteur, :id, :idMedecin, :dateVisite, :dateCreaRapport, :bilan, :coefConfiance, :idMotifVisite);";
+        $query = "insert into rapportvisite (idVisiteur, id, idMedecin, dateVisite, dateCreaRapport, bilan, coefConfiance, idMotifVisite, etatArchive)
+        values (:idVisiteur, :id, :idMedecin, :dateVisite, :dateCreaRapport, :bilan, :coefConfiance, :idMotifVisite, :etatArchive);";
 
         $cmd = $this->monPdo->prepare($query);
 
@@ -79,8 +79,46 @@ class RapportVisite_Model extends My_Model {
         $cmd->bindValue('bilan', $bilan, PDO::PARAM_STR);
         $cmd->bindValue('coefConfiance', $coefConfiance, PDO::PARAM_INT);
         $cmd->bindValue('idMotifVisite', $idMotifVisite, PDO::PARAM_INT);
+        $cmd->bindValue('etatArchive', FALSE, PDO::PARAM_BOOL);
 
         $cmd->execute();
+    }
+
+    public function ArchiverRapportVisite($idVisiteur, $idRapport) {
+
+        $query = "update rapportvisite set etatArchive=TRUE where idVisiteur=:idVisiteur and id=:idRapport;";
+
+        $cmd = $this->monPdo->prepare($query);
+
+        $cmd->bindValue('idVisiteur', $idVisiteur);
+        $cmd->bindValue('idRapport', $idRapport, PDO::PARAM_INT);
+
+        $cmd->execute();
+        $valueRow = $cmd->rowCount();
+        
+        if ($valueRow == 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    public function getEtatRapport($idVisiteur, $idRapport) {
+        $query = "select etatArchive from rapportvisite where idVisiteur = ? and id = ?;";
+        $cmd = $this->monPdo->prepare($query);
+        $cmd->bindValue(1, $idVisiteur);
+        $cmd->bindValue(2, $idRapport);
+        $cmd->execute();
+        $ligne = $cmd->fetch(PDO::FETCH_OBJ);
+        $cmd->closeCursor();
+        if ( $ligne === false ) {
+            return $ligne = null;
+        }
+        else {
+            return $ligne->etatArchive;
+        }
     }
 }
 ?>

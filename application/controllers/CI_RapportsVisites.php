@@ -100,6 +100,57 @@ class CI_RapportsVisites extends My_Controller {
         }
     }
 
+    public function archiverRapportVisite($idVisiteur, $idRapport) {
+
+        // Vérifier si il existe
+        $unRapport = $this->mRapportVisite->getById($idVisiteur, $idRapport);
+
+        // Vérifier son état
+        $etatArchive = $this->mRapportVisite->getEtatRapport($idVisiteur, $idRapport);
+    
+        if ($unRapport != null) {
+
+            $result = $this->mRapportVisite->ArchiverRapportVisite($idVisiteur, $idRapport);
+
+            $response = ["status" => "OK", "data" => "Le rapport de visite n°".$idRapport." du visiteur ".$idVisiteur." a été archivé avec succès"];
+        
+            $this->output
+                    ->set_status_header(200)
+                    ->set_content_type('application/json', 'utf-8')
+                    ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+
+        elseif ($etatArchive == TRUE){
+            $response = ["status" => "ECHEC", "data" => "Rapport de visite déjà archivé"];
+            $this->output
+            ->set_status_header(403)
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+
+        else{
+            
+            $response = ["status" => "ECHEC", "data" => "Rapport de visite ou Visiteur inexistant ou invalide"];
+            $this->output
+            ->set_status_header(400)
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+
+        
+        
+        /*
+        else if ($unRapport == NULL){
+            $response = ["status" => "ERREUR", "data" => "Echec d'archivage du rapport " . $unRapport . " / Id de rapport invalide"];
+            $this->output
+            ->set_status_header(404)
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        }
+        */
+    }
+
+
 
     /**
      * Traite un appel mal formé où une valeur numérique pour l'id est attendu

@@ -77,6 +77,11 @@ $route['visiteurs/(:any)/rapports']['get'] = 'CI_RapportsVisites/getAll/$1';
 $route['visiteurs/(:any)/rapports/(:num)']['get'] = 'CI_RapportsVisites/getOne/$1/$2';
 $route['visiteurs/(:any)/rapports/(:any)']['get'] = 'CI_RapportsVisites/error404/$1/$2';
 
+// ARCHIVAGE
+$route['visiteurs/(:any)/rapports/(:num)/archive']['put'] = 'CI_RapportsVisites/archiverRapportVisite/$1/$2';
+$route['visiteurs/(:any)/rapports/(:any)/archive']['put'] = 'CI_RapportsVisites/error404/$1/$2';
+
+
 // WORKING - Ajout d'un rapport de visite à un visiteur donné
 $route['visiteurs/(:any)/rapports']['post'] = 'CI_RapportsVisites/addRapport/$1';
 
